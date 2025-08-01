@@ -136,27 +136,36 @@
     updateUI();
 let adminAktiv = false;
 
-function aktiviereAdmin() {
-  const passwort = prompt("Admin-Passwort?");
-  if (passwort === "gottmodus420") {
+// ⚠️ Admin-Knopf klickbar
+document.getElementById("adminTrigger").addEventListener("click", () => {
+  const pw = prompt("Passwort für Admin-Modus?");
+  if (pw === "gommemode") {
     adminAktiv = true;
-    showMessage("Admin-Modus aktiviert 💻");
-    console.log("Admin-Funktionen verfügbar: addPoints(X)");
+    document.getElementById("adminPanel").style.display = "block";
+    showMessage("🛠 Admin-Modus aktiviert");
   } else {
-    showMessage("Falsches Passwort!");
+    showMessage("❌ Falsches Passwort");
   }
-}
+});
 
-// Admin-Funktion
+// Tastenkürzel: Strg + G
+document.addEventListener("keydown", function (e) {
+  if (e.ctrlKey && e.key.toLowerCase() === "g") {
+    document.getElementById("adminTrigger").click();
+  }
+});
+
+// Admin-Funktion: Punkte hinzufügen
 function addPoints(x) {
   if (adminAktiv) {
     punkte += x;
     updateUI();
     console.log(`${x} Punkte hinzugefügt.`);
   } else {
-    alert("Zugriff verweigert ❌");
+    alert("Zugriff verweigert");
   }
 }
+
 
   </script>
 </body>
