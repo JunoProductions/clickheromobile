@@ -134,6 +134,30 @@
     }
 
     updateUI();
+let adminAktiv = false;
+
+function aktiviereAdmin() {
+  const passwort = prompt("Admin-Passwort?");
+  if (passwort === "gottmodus420") {
+    adminAktiv = true;
+    showMessage("Admin-Modus aktiviert 💻");
+    console.log("Admin-Funktionen verfügbar: addPoints(X)");
+  } else {
+    showMessage("Falsches Passwort!");
+  }
+}
+
+// Admin-Funktion
+function addPoints(x) {
+  if (adminAktiv) {
+    punkte += x;
+    updateUI();
+    console.log(`${x} Punkte hinzugefügt.`);
+  } else {
+    alert("Zugriff verweigert ❌");
+  }
+}
+
   </script>
 </body>
 </html>
