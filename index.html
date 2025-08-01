@@ -113,7 +113,7 @@
       klickUpgrades.forEach((upg) => {
         const btn = document.getElementById(upg.id);
         btn.textContent =
-          upg.name + " (Stufe " + upg.level + ") – " + getKlickPreis(upg) + " Punkte";
+          `${upg.name} (+${upg.bonus}) (Stufe ${upg.level}) – ${getKlickPreis(upg)} Punkte`;
       });
 
       for (let i = 0; i < 5; i++) {
