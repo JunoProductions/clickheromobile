@@ -1,129 +1,139 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Click Hero</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <h1>Click Hero</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Click Hero</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Click Hero</h1>
 
-    <div id="score">Punkte: 0</div>
-    <div id="nachricht"></div>
-    <div id="animation-container"></div>
-    <div id="proKlick">Punkte pro Klick: 1</div>
+  <div id="score">Punkte: 0</div>
+  <div id="nachricht"></div>
+  <div id="animation-container"></div>
+  <div id="proKlick">Punkte pro Klick: 1</div>
 
-    <button id="clicker">Klick mich</button>
+  <button id="clicker">Klick mich</button>
 
-    <div class="section">
-      <h2>🖱️ Klick-Upgrades</h2>
-<button id="buyClick1">Lade...</button>
-<button id="buyClick2">Lade...</button>
-<button id="buyClick3">Lade...</button>
-      <button id="buyClick1">Lade...</button>
-      <button id="buyClick2">Lade...</button>
-      <button id="buyClick3">Lade...</button>
+  <div class="section">
+    <h2>🖱️ Klick-Upgrades</h2>
+    <button id="buyClick1">Tap Tap Boost</button>
+    <button id="buyClick2">Double Trouble</button>
+    <button id="buyClick3">Thicc Click</button>
 
-      <h2>🤖 Auto-Clicker</h2>
-    </div>
+    <h2>🤖 Auto-Clicker</h2>
+    <button id="buyAuto1">Clickdrone Mini</button>
+    <button id="buyAuto2">AutoTap Pro</button>
+    <button id="buyAuto3">Fingerbot 3000</button>
+    <button id="buyAuto4">Klick-Fabrik</button>
+    <button id="buyAuto5">Klick-Galaxie</button>
+  </div>
 
-    <script>
-      let punkte = 0;
-      let punkteProKlick = 1;
+  <script>
+    let punkte = 0;
+    let punkteProKlick = 1;
 
-      // Mehrere Klick-Upgrades
-      const klickUpgrades = [
-        { id: "buyClick1", name: "Tap Tap Boost", bonus: 1, base: 25, factor: 1.5, level: 0 },
-        { id: "buyClick2", name: "Double Trouble", bonus: 3, base: 100, factor: 1.6, level: 0 },
-        { id: "buyClick3", name: "Thicc Click", bonus: 7, base: 300, factor: 1.7, level: 0 }
-      ];
+    const klickUpgrades = [
+      { id: "buyClick1", name: "Tap Tap Boost", bonus: 1, base: 25, factor: 1.5, level: 0 },
+      { id: "buyClick2", name: "Double Trouble", bonus: 3, base: 100, factor: 1.6, level: 0 },
+      { id: "buyClick3", name: "Thicc Click", bonus: 7, base: 300, factor: 1.7, level: 0 }
+    ];
 
-      function getKlickPreis(upg) {
-        return Math.floor(upg.base * Math.pow(upg.factor, upg.level));
-      }
+    function getKlickPreis(upg) {
+      return Math.floor(upg.base * Math.pow(upg.factor, upg.level));
+    }
 
-      // AutoClicker
-      let autoClickerStufen = [0, 0, 0, 0, 0];
-      const autoClickerStartKosten = [800, 2500, 9000, 20000, 100000];
-      const autoClickerFaktor = 1.4;
-      const autoClickerPower = [1, 5, 12, 30, 100];
-      const autoClickerNamen = ["Clickdrone Mini", "AutoTap Pro", "Fingerbot 3000", "Klick-Fabrik", "Klick-Galaxie"];
+    let autoClickerStufen = [0, 0, 0, 0, 0];
+    const autoClickerStartKosten = [800, 2500, 9000, 20000, 100000];
+    const autoClickerFaktor = 1.4;
+    const autoClickerPower = [1, 5, 12, 30, 100];
+    const autoClickerNamen = [
+      "Clickdrone Mini",
+      "AutoTap Pro",
+      "Fingerbot 3000",
+      "Klick-Fabrik",
+      "Klick-Galaxie"
+    ];
 
-      function getAutoKosten(i) {
-        return Math.floor(autoClickerStartKosten[i] * Math.pow(autoClickerFaktor, autoClickerStufen[i]));
-      }
+    function getAutoKosten(i) {
+      return Math.floor(autoClickerStartKosten[i] * Math.pow(autoClickerFaktor, autoClickerStufen[i]));
+    }
 
-      const score = document.getElementById("score");
-      const nachricht = document.getElementById("nachricht");
-      const proKlickAnzeige = document.getElementById("proKlick");
-      const clickButton = document.getElementById("clicker");
+    const score = document.getElementById("score");
+    const nachricht = document.getElementById("nachricht");
+    const proKlickAnzeige = document.getElementById("proKlick");
+    const clickButton = document.getElementById("clicker");
 
-      clickButton.addEventListener("click", () => {
-        punkte += punkteProKlick;
-        updateUI();
+    clickButton.addEventListener("click", () => {
+      punkte += punkteProKlick;
+      updateUI();
+    });
+
+    klickUpgrades.forEach((upg) => {
+      const btn = document.getElementById(upg.id);
+      btn.addEventListener("click", () => {
+        const preis = getKlickPreis(upg);
+        if (punkte >= preis) {
+          punkte -= preis;
+          punkteProKlick += upg.bonus;
+          upg.level++;
+          updateUI();
+        } else {
+          showMessage("Nicht genug Punkte für " + upg.name + " (" + preis + ")");
+        }
       });
+    });
 
-      // Klick-Upgrades Handler
+    for (let i = 0; i < 5; i++) {
+      const btn = document.getElementById("buyAuto" + (i + 1));
+      btn.addEventListener("click", () => {
+        const kosten = getAutoKosten(i);
+        if (punkte >= kosten) {
+          punkte -= kosten;
+          autoClickerStufen[i]++;
+          updateUI();
+        } else {
+          showMessage("Nicht genug Punkte für " + autoClickerNamen[i] + " (" + kosten + ")");
+        }
+      });
+    }
+
+    setInterval(() => {
+      for (let i = 0; i < autoClickerStufen.length; i++) {
+        punkte += autoClickerStufen[i] * autoClickerPower[i];
+      }
+      updateUI();
+    }, 1000);
+
+    function updateUI() {
+      score.textContent = "Punkte: " + punkte;
+      proKlickAnzeige.textContent = "Punkte pro Klick: " + punkteProKlick;
+
       klickUpgrades.forEach((upg) => {
         const btn = document.getElementById(upg.id);
-        btn.addEventListener("click", () => {
-          const preis = getKlickPreis(upg);
-          if (punkte >= preis) {
-            punkte -= preis;
-            punkteProKlick += upg.bonus;
-            upg.level++;
-            updateUI();
-          } else {
-            showMessage("Nicht genug Punkte für " + upg.name + " (" + preis + ")");
-          }
-        });
+        btn.textContent =
+          upg.name + " (Stufe " + upg.level + ") – " + getKlickPreis(upg) + " Punkte";
       });
 
-      // AutoClicker Handler
       for (let i = 0; i < 5; i++) {
         const btn = document.getElementById("buyAuto" + (i + 1));
-        btn.addEventListener("click", () => {
-          const kosten = getAutoKosten(i);
-          if (punkte >= kosten) {
-            punkte -= kosten;
-            autoClickerStufen[i]++;
-            updateUI();
-          } else {
-            showMessage("Nicht genug Punkte für " + autoClickerNamen[i] + " (" + kosten + ")");
-          }
-        });
+        btn.textContent =
+          autoClickerNamen[i] +
+          " (Stufe " +
+          autoClickerStufen[i] +
+          ") – " +
+          getAutoKosten(i) +
+          " Punkte";
       }
+    }
 
-      setInterval(() => {
-        for (let i = 0; i < autoClickerStufen.length; i++) {
-          punkte += autoClickerStufen[i] * autoClickerPower[i];
-        }
-        updateUI();
-      }, 1000);
+    function showMessage(text) {
+      nachricht.textContent = text;
+      setTimeout(() => (nachricht.textContent = ""), 2000);
+    }
 
-      function updateUI() {
-        score.textContent = "Punkte: " + punkte;
-        proKlickAnzeige.textContent = "Punkte pro Klick: " + punkteProKlick;
-
-        klickUpgrades.forEach((upg) => {
-          const btn = document.getElementById(upg.id);
-          const preis = getKlickPreis(upg);
-          btn.textContent = upg.name + " (Stufe " + upg.level + ") – " + preis + " Punkte";
-        });
-
-        for (let i = 0; i < 5; i++) {
-          const btn = document.getElementById("buyAuto" + (i + 1));
-          btn.textContent = autoClickerNamen[i] + " (Stufe " + autoClickerStufen[i] + ") – " + getAutoKosten(i) + " Punkte";
-        }
-      }
-
-      function showMessage(text) {
-        nachricht.textContent = text;
-        setTimeout(() => (nachricht.textContent = ""), 2000);
-      }
-
-      updateUI();
-    </script>
-  </body>
+    updateUI();
+  </script>
+</body>
 </html>
