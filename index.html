@@ -168,5 +168,21 @@ function addPoints(x) {
 
 
   </script>
+<!-- ⚠️ Admin-Button -->
+<button id="adminTrigger"
+  style="position: fixed; top: 10px; right: 10px; z-index: 9999;
+         background-color: darkred; color: white; font-weight: bold;
+         padding: 10px 15px; border-radius: 8px; border: none; cursor: pointer;">
+  ⚠️ Admin
+</button>
+
+<!-- 🛠 Admin-Panel (zuerst versteckt) -->
+<div id="adminPanel" style="display: none; margin-top: 20px;">
+  <h2>🛠 Admin-Bereich</h2>
+  <button onclick="addPoints(1000)">+1.000 Punkte</button>
+  <button onclick="addPoints(10000)">+10.000 Punkte</button>
+  <button onclick="punkte = 0; updateUI();">Reset Punkte</button>
+</div>
+
 </body>
 </html>
