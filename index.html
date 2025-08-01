@@ -5,15 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Click Hero</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="theme-candy">
   <h1>Click Hero</h1>
-
   <div id="score">Punkte: 0</div>
   <div id="nachricht"></div>
-  <div id="animation-container"></div>
   <div id="proKlick">Punkte pro Klick: 1</div>
-
   <button id="clicker">Klick mich</button>
 
   <div class="section">
@@ -30,148 +28,192 @@
     <button id="buyAuto5">Klick-Galaxie</button>
   </div>
 
-  <!-- ⚙️ Symbolleiste -->
   <button id="toggleIcons" title="Menü öffnen">⚙️</button>
-
   <div id="iconBar">
-    <button id="adminTrigger" title="Admin">🛠️</button>
-    <button title="Speichern (später)">💾</button>
-    <button title="Ton (später)">🔊</button>
-    <button title="Theme (später)">🌙</button>
+    <button id="adminTrigger" title="Admin-Login">🛠️</button>
   </div>
 
-  <!-- 🛠 Admin-Panel (start hidden) -->
   <div id="adminPanel">
-    <h2>🛠 Admin-Bereich</h2>
+    <h2>🛠 Admin aktiviert ✅</h2>
     <button onclick="addPoints(1000)">+1.000 Punkte</button>
     <button onclick="addPoints(10000)">+10.000 Punkte</button>
-    <button onclick="addPoints(100000)">+100.000 Punkte</button>
-    <button onclick="punkte = 0; updateUI();">Reset Punkte</button>
+    <button onclick="resetGame()">💥 Spiel zurücksetzen</button>
+
+    <h3>🎨 Theme wechseln</h3>
+    <select id="themeSelector">
+      <option value="candy">🍬 Candy Pop</option>
+      <option value="arcade">🕹️ Arcade</option>
+      <option value="fantasy">🧙 Fantasy</option>
+      <option value="tech">📊 Tech</option>
+      <option value="cursed">💀 Cursed</option>
+    </select>
   </div>
 
-  <script>
-    let punkte = 0;
-    let punkteProKlick = 1;
-    let adminAktiv = false;
+<script>
+let punkte = 0;
+let punkteProKlick = 1;
+let adminAktiv = false;
 
-    const klickUpgrades = [
-      { id: "buyClick1", name: "Tap Tap Boost", bonus: 1, base: 25, factor: 1.5, level: 0 },
-      { id: "buyClick2", name: "Double Trouble", bonus: 3, base: 100, factor: 1.6, level: 0 },
-      { id: "buyClick3", name: "Thicc Click", bonus: 7, base: 300, factor: 1.7, level: 0 }
-    ];
+const klickUpgrades = [
+  { id: "buyClick1", name: "Tap Tap Boost", bonus: 1, base: 25, factor: 1.5, level: 0 },
+  { id: "buyClick2", name: "Double Trouble", bonus: 3, base: 100, factor: 1.6, level: 0 },
+  { id: "buyClick3", name: "Thicc Click", bonus: 7, base: 300, factor: 1.7, level: 0 }
+];
 
-    const autoClickerStufen = [0, 0, 0, 0, 0];
-    const autoClickerStartKosten = [800, 2500, 9000, 20000, 100000];
-    const autoClickerFaktor = 1.4;
-    const autoClickerPower = [1, 5, 12, 30, 100];
-    const autoClickerNamen = [
-      "Clickdrone Mini",
-      "AutoTap Pro",
-      "Fingerbot 3000",
-      "Klick-Fabrik",
-      "Klick-Galaxie"
-    ];
+const autoClickerStufen = [0, 0, 0, 0, 0];
+const autoClickerStartKosten = [800, 2500, 9000, 20000, 100000];
+const autoClickerFaktor = 1.4;
+const autoClickerPower = [1, 5, 12, 30, 100];
+const autoClickerNamen = [
+  "Clickdrone Mini",
+  "AutoTap Pro",
+  "Fingerbot 3000",
+  "Klick-Fabrik",
+  "Klick-Galaxie"
+];
 
-    function getKlickPreis(upg) {
-      return Math.floor(upg.base * Math.pow(upg.factor, upg.level));
-    }
+const score = document.getElementById("score");
+const nachricht = document.getElementById("nachricht");
+const proKlickAnzeige = document.getElementById("proKlick");
+const clickButton = document.getElementById("clicker");
+const themeSelector = document.getElementById("themeSelector");
 
-    function getAutoKosten(i) {
-      return Math.floor(autoClickerStartKosten[i] * Math.pow(autoClickerFaktor, autoClickerStufen[i]));
-    }
+function getKlickPreis(upg) {
+  return Math.floor(upg.base * Math.pow(upg.factor, upg.level));
+}
+function getAutoKosten(i) {
+  return Math.floor(autoClickerStartKosten[i] * Math.pow(autoClickerFaktor, autoClickerStufen[i]));
+}
 
-    const score = document.getElementById("score");
-    const nachricht = document.getElementById("nachricht");
-    const proKlickAnzeige = document.getElementById("proKlick");
-    const clickButton = document.getElementById("clicker");
+clickButton.addEventListener("click", () => {
+  punkte += punkteProKlick;
+  updateUI();
+  saveGame();
+});
 
-    clickButton.addEventListener("click", () => {
-      punkte += punkteProKlick;
+klickUpgrades.forEach((upg) => {
+  const btn = document.getElementById(upg.id);
+  btn.addEventListener("click", () => {
+    const preis = getKlickPreis(upg);
+    if (punkte >= preis) {
+      punkte -= preis;
+      punkteProKlick += upg.bonus;
+      upg.level++;
       updateUI();
-    });
-
-    klickUpgrades.forEach((upg) => {
-      const btn = document.getElementById(upg.id);
-      btn.addEventListener("click", () => {
-        const preis = getKlickPreis(upg);
-        if (punkte >= preis) {
-          punkte -= preis;
-          punkteProKlick += upg.bonus;
-          upg.level++;
-          updateUI();
-        } else {
-          showMessage("Nicht genug Punkte für " + upg.name + " (" + preis + ")");
-        }
-      });
-    });
-
-    for (let i = 0; i < 5; i++) {
-      const btn = document.getElementById("buyAuto" + (i + 1));
-      btn.addEventListener("click", () => {
-        const kosten = getAutoKosten(i);
-        if (punkte >= kosten) {
-          punkte -= kosten;
-          autoClickerStufen[i]++;
-          updateUI();
-        } else {
-          showMessage("Nicht genug Punkte für " + autoClickerNamen[i] + " (" + kosten + ")");
-        }
-      });
+      saveGame();
+    } else {
+      showMessage("Nicht genug Punkte für " + upg.name + " (" + preis + ")");
     }
+  });
+});
 
-    setInterval(() => {
-      for (let i = 0; i < autoClickerStufen.length; i++) {
-        punkte += autoClickerStufen[i] * autoClickerPower[i];
-      }
+for (let i = 0; i < 5; i++) {
+  const btn = document.getElementById("buyAuto" + (i + 1));
+  btn.addEventListener("click", () => {
+    const kosten = getAutoKosten(i);
+    if (punkte >= kosten) {
+      punkte -= kosten;
+      autoClickerStufen[i]++;
       updateUI();
-    }, 1000);
-
-    function updateUI() {
-      score.textContent = "Punkte: " + punkte;
-      proKlickAnzeige.textContent = "Punkte pro Klick: " + punkteProKlick;
-
-      klickUpgrades.forEach((upg) => {
-        const btn = document.getElementById(upg.id);
-        btn.textContent = `${upg.name} (+${upg.bonus}) (Stufe ${upg.level}) – ${getKlickPreis(upg)} Punkte`;
-      });
-
-      for (let i = 0; i < 5; i++) {
-        const btn = document.getElementById("buyAuto" + (i + 1));
-        btn.textContent = `${autoClickerNamen[i]} (Stufe ${autoClickerStufen[i]}) – ${getAutoKosten(i)} Punkte`;
-      }
+      saveGame();
+    } else {
+      showMessage("Nicht genug Punkte für " + autoClickerNamen[i] + " (" + kosten + ")");
     }
+  });
+}
 
-    function showMessage(text) {
-      nachricht.textContent = text;
-      setTimeout(() => (nachricht.textContent = ""), 2000);
-    }
+setInterval(() => {
+  for (let i = 0; i < autoClickerStufen.length; i++) {
+    punkte += autoClickerStufen[i] * autoClickerPower[i];
+  }
+  updateUI();
+  saveGame();
+}, 1000);
 
-    document.getElementById("toggleIcons").addEventListener("click", () => {
-      const bar = document.getElementById("iconBar");
-      bar.style.display = (bar.style.display === "none" || bar.style.display === "") ? "flex" : "none";
-    });
+function updateUI() {
+  score.textContent = "Punkte: " + punkte;
+  proKlickAnzeige.textContent = "Punkte pro Klick: " + punkteProKlick;
 
-    document.getElementById("adminTrigger").addEventListener("click", () => {
-      const pw = prompt("Passwort für Admin-Modus?");
-      if (pw === "gommemode") {
-        adminAktiv = true;
-        document.getElementById("adminPanel").style.display = "block";
-        showMessage("🛠 Admin-Modus aktiviert");
-      } else {
-        showMessage("❌ Falsches Passwort");
-      }
-    });
+  klickUpgrades.forEach((upg) => {
+    document.getElementById(upg.id).textContent = `${upg.name} (+${upg.bonus}) (Stufe ${upg.level}) – ${getKlickPreis(upg)} Punkte`;
+  });
 
-    function addPoints(x) {
-      if (adminAktiv) {
-        punkte += x;
-        updateUI();
-      } else {
-        alert("Zugriff verweigert");
-      }
-    }
+  for (let i = 0; i < 5; i++) {
+    document.getElementById("buyAuto" + (i + 1)).textContent =
+      `${autoClickerNamen[i]} (Stufe ${autoClickerStufen[i]}) – ${getAutoKosten(i)} Punkte`;
+  }
+}
 
+function showMessage(text) {
+  nachricht.textContent = text;
+  setTimeout(() => (nachricht.textContent = ""), 2000);
+}
+
+document.getElementById("toggleIcons").addEventListener("click", () => {
+  const bar = document.getElementById("iconBar");
+  bar.style.display = (bar.style.display === "none" || bar.style.display === "") ? "flex" : "none";
+});
+
+document.getElementById("adminTrigger").addEventListener("click", () => {
+  const pw = prompt("Passwort für Admin-Modus?");
+  if (pw === "gommemode") {
+    adminAktiv = true;
+    document.getElementById("adminPanel").style.display = "block";
+    showMessage("🛠 Admin-Modus aktiviert");
+  } else {
+    showMessage("❌ Falsches Passwort");
+  }
+});
+
+themeSelector.addEventListener("change", () => {
+  const theme = themeSelector.value;
+  document.body.className = "theme-" + theme;
+  localStorage.setItem("theme", theme);
+});
+
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  document.body.className = "theme-" + savedTheme;
+  themeSelector.value = savedTheme;
+}
+
+function addPoints(x) {
+  if (adminAktiv) {
+    punkte += x;
     updateUI();
-  </script>
+  }
+}
+function resetGame() {
+  if (confirm("Fortschritt zurücksetzen?")) {
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+function saveGame() {
+  const data = {
+    punkte,
+    punkteProKlick,
+    klickUpgrades: klickUpgrades.map(upg => upg.level),
+    autoClickerStufen,
+    theme: document.body.className
+  };
+  localStorage.setItem("clickhero_save", JSON.stringify(data));
+}
+
+function loadGame() {
+  const data = localStorage.getItem("clickhero_save");
+  if (data) {
+    const save = JSON.parse(data);
+    punkte = save.punkte ?? 0;
+    punkteProKlick = save.punkteProKlick ?? 1;
+    klickUpgrades.forEach((upg, i) => upg.level = save.klickUpgrades?.[i] ?? 0);
+    save.autoClickerStufen?.forEach((val, i) => autoClickerStufen[i] = val ?? 0);
+  }
+}
+
+loadGame();
+updateUI();
+</script>
 </body>
 </html>

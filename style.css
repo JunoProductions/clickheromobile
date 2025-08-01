@@ -1,61 +1,48 @@
 body {
-  font-family: 'Courier New', monospace;
-  background-color: #0f380f;
-  color: #9bbc0f;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 20px;
   text-align: center;
-}
-
-h1, h2 {
-  color: #8bac0f;
-  text-shadow: 1px 1px #000;
+  transition: background 0.4s, color 0.4s;
 }
 
 button {
-  font-family: 'Courier New', monospace;
-  background-color: #8bac0f;
-  color: #0f380f;
-  border: 2px solid #0f380f;
-  padding: 10px 16px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
   margin: 6px;
-  border-radius: 2px;
   font-size: 16px;
   cursor: pointer;
-  transition: transform 0.1s ease;
-}
-
-button:hover {
-  transform: scale(1.05);
-  background-color: #9bbc0f;
-}
-
-button:active {
-  transform: scale(0.95);
-  background-color: #6b8e23;
+  transition: all 0.2s ease;
 }
 
 #score, #nachricht, #proKlick {
   font-size: 20px;
+  padding: 10px;
   margin: 10px auto;
-  background-color: #0f380f;
-  padding: 6px 12px;
-  border: 2px dashed #8bac0f;
+  background: #fff;
+  border-radius: 8px;
   display: inline-block;
 }
 
+/* SECTION STYLE */
 .section {
-  border-top: 2px dashed #4e7504;
-  margin-top: 30px;
-  padding-top: 20px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 600px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 #adminPanel {
   display: none;
-  background-color: #1a441a;
-  padding: 15px;
-  margin-top: 25px;
-  border: 2px solid #8bac0f;
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 600px;
+  border-radius: 10px;
+  background: #fafafa;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 #iconBar {
@@ -63,48 +50,91 @@ button:active {
   position: fixed;
   top: 50px;
   right: 10px;
-  background: #1a441a;
-  border: 2px solid #8bac0f;
-  border-radius: 6px;
+  background: #fff;
+  border-radius: 10px;
   padding: 10px;
   flex-direction: column;
-  gap: 10px;
-  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
 }
 
 #iconBar button {
   background: none;
   border: none;
-  font-size: 24px;
-  color: #9bbc0f;
+  font-size: 22px;
   cursor: pointer;
-}
-
-#iconBar button:hover {
-  color: #cce06b;
+  margin: 4px 0;
 }
 
 #toggleIcons {
   position: fixed;
   top: 10px;
   right: 10px;
-  z-index: 10000;
   font-size: 22px;
-  background: #0f380f;
-  color: #9bbc0f;
-  border: 2px solid #8bac0f;
-  border-radius: 4px;
-  padding: 6px 10px;
+  background: #ffffff;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   cursor: pointer;
 }
 
-@media screen and (max-width: 600px) {
-  button {
-    font-size: 14px;
-    padding: 8px 12px;
-  }
+/* THEMES */
+.theme-candy {
+  background: linear-gradient(to bottom, #f8e1f4, #ffd6f0);
+  color: #6b1e5f;
+}
+.theme-candy button {
+  background: #ff84c1;
+  color: white;
+  box-shadow: 0 4px 10px rgba(255, 132, 193, 0.4);
+}
+.theme-candy button:hover {
+  background: #f56eb0;
+}
 
-  #score, #nachricht, #proKlick {
-    font-size: 16px;
-  }
+.theme-arcade {
+  background-color: #000;
+  color: #ff44cc;
+}
+.theme-arcade button {
+  background: #44ffdd;
+  color: #000;
+  box-shadow: 0 0 12px #44ffdd;
+}
+.theme-arcade button:hover {
+  background: #33ccb3;
+}
+
+.theme-fantasy {
+  background: #f4e3c1;
+  color: #4e2e14;
+  font-family: 'Cinzel', serif;
+}
+.theme-fantasy button {
+  background: #8b5e3c;
+  border: 2px solid #d4b083;
+  color: #fff8dc;
+}
+
+.theme-tech {
+  background: #f9f9f9;
+  color: #333;
+}
+.theme-tech button {
+  background: #e0e0e0;
+  color: #000;
+  border: 1px solid #ccc;
+}
+
+.theme-cursed {
+  background: #ff00ff;
+  color: #000000;
+  font-family: 'Comic Sans MS', cursive;
+}
+.theme-cursed button {
+  background: lime;
+  color: magenta;
+  border: 5px dashed yellow;
+  font-size: 20px;
 }
