@@ -30,9 +30,26 @@
     <button id="buyAuto5">Klick-Galaxie</button>
   </div>
 
+  <!-- ⚠️ Admin Button -->
+  <button id="adminTrigger"
+    style="position: fixed; top: 10px; right: 10px; z-index: 9999;
+           background-color: darkred; color: white; font-weight: bold;
+           padding: 10px 15px; border-radius: 8px; border: none; cursor: pointer;">
+    ⚠️ Admin
+  </button>
+
+  <!-- 🛠 Admin-Panel (start hidden) -->
+  <div id="adminPanel" style="display: none; margin-top: 30px;">
+    <h2>🛠 Admin-Bereich</h2>
+    <button onclick="addPoints(1000)">+1.000 Punkte</button>
+    <button onclick="addPoints(10000)">+10.000 Punkte</button>
+    <button onclick="punkte = 0; updateUI();">Reset Punkte</button>
+  </div>
+
   <script>
     let punkte = 0;
     let punkteProKlick = 1;
+    let adminAktiv = false;
 
     const klickUpgrades = [
       { id: "buyClick1", name: "Tap Tap Boost", bonus: 1, base: 25, factor: 1.5, level: 0 },
@@ -112,19 +129,12 @@
 
       klickUpgrades.forEach((upg) => {
         const btn = document.getElementById(upg.id);
-        btn.textContent =
-          `${upg.name} (+${upg.bonus}) (Stufe ${upg.level}) – ${getKlickPreis(upg)} Punkte`;
+        btn.textContent = `${upg.name} (+${upg.bonus}) (Stufe ${upg.level}) – ${getKlickPreis(upg)} Punkte`;
       });
 
       for (let i = 0; i < 5; i++) {
         const btn = document.getElementById("buyAuto" + (i + 1));
-        btn.textContent =
-          autoClickerNamen[i] +
-          " (Stufe " +
-          autoClickerStufen[i] +
-          ") – " +
-          getAutoKosten(i) +
-          " Punkte";
+        btn.textContent = `${autoClickerNamen[i]} (Stufe ${autoClickerStufen[i]}) – ${getAutoKosten(i)} Punkte`;
       }
     }
 
@@ -133,56 +143,35 @@
       setTimeout(() => (nachricht.textContent = ""), 2000);
     }
 
+    // Admin-Funktion
+    document.getElementById("adminTrigger").addEventListener("click", () => {
+      const pw = prompt("Passwort für Admin-Modus?");
+      if (pw === "gommemode") {
+        adminAktiv = true;
+        document.getElementById("adminPanel").style.display = "block";
+        showMessage("🛠 Admin-Modus aktiviert");
+      } else {
+        showMessage("❌ Falsches Passwort");
+      }
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.ctrlKey && e.key.toLowerCase() === "g") {
+        document.getElementById("adminTrigger").click();
+      }
+    });
+
+    function addPoints(x) {
+      if (adminAktiv) {
+        punkte += x;
+        updateUI();
+        console.log(`${x} Punkte hinzugefügt.`);
+      } else {
+        alert("Zugriff verweigert");
+      }
+    }
+
     updateUI();
-let adminAktiv = false;
-
-// ⚠️ Admin-Knopf klickbar
-document.getElementById("adminTrigger").addEventListener("click", () => {
-  const pw = prompt("Passwort für Admin-Modus?");
-  if (pw === "gommemode") {
-    adminAktiv = true;
-    document.getElementById("adminPanel").style.display = "block";
-    showMessage("🛠 Admin-Modus aktiviert");
-  } else {
-    showMessage("❌ Falsches Passwort");
-  }
-});
-
-// Tastenkürzel: Strg + G
-document.addEventListener("keydown", function (e) {
-  if (e.ctrlKey && e.key.toLowerCase() === "g") {
-    document.getElementById("adminTrigger").click();
-  }
-});
-
-// Admin-Funktion: Punkte hinzufügen
-function addPoints(x) {
-  if (adminAktiv) {
-    punkte += x;
-    updateUI();
-    console.log(`${x} Punkte hinzugefügt.`);
-  } else {
-    alert("Zugriff verweigert");
-  }
-}
-
-
   </script>
-<!-- ⚠️ Admin-Button -->
-<button id="adminTrigger"
-  style="position: fixed; top: 10px; right: 10px; z-index: 9999;
-         background-color: darkred; color: white; font-weight: bold;
-         padding: 10px 15px; border-radius: 8px; border: none; cursor: pointer;">
-  ⚠️ Admin
-</button>
-
-<!-- 🛠 Admin-Panel (zuerst versteckt) -->
-<div id="adminPanel" style="display: none; margin-top: 20px;">
-  <h2>🛠 Admin-Bereich</h2>
-  <button onclick="addPoints(1000)">+1.000 Punkte</button>
-  <button onclick="addPoints(10000)">+10.000 Punkte</button>
-  <button onclick="punkte = 0; updateUI();">Reset Punkte</button>
-</div>
-
 </body>
 </html>
