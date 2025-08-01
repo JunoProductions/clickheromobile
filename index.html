@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Click Hero</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Click Hero</h1>
+
+    <div id="score">Punkte: 0</div>
+    <div id="nachricht"></div>
+    <div id="animation-container"></div>
+    <div id="proKlick">Punkte pro Klick: 1</div>
+
+    <button id="clicker">Klick mich</button>
+
+    <div class="section">
+      <h2>🖱️ Klick-Upgrades</h2>
+      <button id="buyClick">Tap Tap Boost (Kosten: 25)</button>
+
+      <h2>🤖 Auto-Clicker</h2>
+      <button id="buyAuto1">Clickdrone Mini (0) – 800 Punkte</button>
+      <button id="buyAuto2">AutoTap Pro (0) – 2500 Punkte</button>
+      <button id="buyAuto3">Fingerbot 3000 (0) – 9000 Punkte</button>
+      <button id="buyAuto4">Klick-Fabrik (0) – 20000 Punkte</button>
+      <button id="buyAuto5">Klick-Galaxie (0) – 100000 Punkte</button>
+    </div>
+
+    <script>
+      let punkte = 0;
+      let punkteProKlick = 1;
+
+      let klickStufe = 0;
+      const klickBasis = 25;
+      const klickFaktor = 1.7;
+
+      function getKlickKosten() {
+        return Math.floor(klickBasis * Math.pow(klickFaktor, klickStufe));
+      }
+
+      let autoClickerStufen = [0, 0, 0, 0, 0];
+      const autoClickerStartKosten = [800, 2500, 9000, 20000, 100000];
+      const autoClickerFaktor = 1.4;
+      const autoClickerPower = [1, 5, 12, 30, 100];
+
+      function getAutoKosten(i) {
+        return Math.floor(autoClickerStartKosten[i] * Math.pow(autoClickerFaktor, autoClickerStufen[i]));
+      }
+
+      const score = document.getElementById("score");
+      const nachricht = document.getElementById("nachricht");
+      const proKlickAnzeige = document.getElementById("proKlick");
+      const clickButton = document.getElementById("clicker");
+      const buyClickButton = document.getElementById("buyClick");
+
+      clickButton.addEventListener("click", () => {
+        punkte += punkteProKlick;
+        updateUI();
+      });
+
+      buyClickButton.addEventListener("click", () => {
+        let kosten = getKlickKosten();
+        if (punkte >= kosten) {
+          punkte -= kosten;
+          punkteProKlick += 1;
+          klickStufe++;
+          updateUI();
+        } else {
+          showMessage("Nicht genug Punkte für Tap Tap Boost (" + kosten + ")");
+        }
+      });
+
+      for (let i = 0; i < 5; i++) {
+        const btn = document.getElementById("buyAuto" + (i + 1));
+        btn.addEventListener("click", () => {
+          const kosten = getAutoKosten(i);
+          if (punkte >= kosten) {
+            punkte -= kosten;
+            autoClickerStufen[i]++;
+            updateUI();
+          } else {
+            showMessage("Nicht genug Punkte für AutoClicker " + (i + 1) + " (" + kosten + ")");
+          }
+        });
+      }
+
+      setInterval(() => {
+        for (let i = 0; i < autoClickerStufen.length; i++) {
+          punkte += autoClickerStufen[i] * autoClickerPower[i];
+        }
+        updateUI();
+      }, 1000);
+
+      function updateUI() {
+        score.textContent = "Punkte: " + punkte;
+        proKlickAnzeige.textContent = "Punkte pro Klick: " + punkteProKlick;
+        buyClickButton.textContent = "Tap Tap Boost (Kosten: " + getKlickKosten() + ")";
+        for (let i = 0; i < 5; i++) {
+          const btn = document.getElementById("buyAuto" + (i + 1));
+          btn.textContent = getAutoClickerName(i) + " (" + autoClickerStufen[i] + ") – " + getAutoKosten(i) + " Punkte";
+        }
+      }
+
+      function showMessage(text) {
+        nachricht.textContent = text;
+        setTimeout(() => (nachricht.textContent = ""), 2000);
+      }
+
+      function getAutoClickerName(i) {
+        return ["Clickdrone Mini", "AutoTap Pro", "Fingerbot 3000", "Klick-Fabrik", "Klick-Galaxie"][i];
+      }
+    </script>
+  </body>
+</html>
