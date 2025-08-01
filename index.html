@@ -30,16 +30,21 @@
     <button id="buyAuto5">Klick-Galaxie</button>
   </div>
 
-  <!-- ⚠️ Admin Button -->
-  <button id="adminTrigger"
-    style="position: fixed; top: 10px; right: 10px; z-index: 9999;
-           background-color: darkred; color: white; font-weight: bold;
-           padding: 10px 15px; border-radius: 8px; border: none; cursor: pointer;">
-    ⚠️ Admin
+  <!-- ⚙️ Icon-Leiste öffnen -->
+  <button id="toggleIcons" title="Menü öffnen">
+    ⚙️
   </button>
 
-  <!-- 🛠 Admin-Panel (start hidden) -->
-  <div id="adminPanel" style="display: none; margin-top: 30px;">
+  <!-- 🛠 Symbolleiste -->
+  <div id="iconBar">
+    <button id="adminTrigger" title="Admin">🛠️</button>
+    <button title="Speichern (später)">💾</button>
+    <button title="Ton (später)">🔊</button>
+    <button title="Theme (später)">🌙</button>
+  </div>
+
+  <!-- 🛠 Admin-Panel -->
+  <div id="adminPanel">
     <h2>🛠 Admin-Bereich</h2>
     <button onclick="addPoints(1000)">+1.000 Punkte</button>
     <button onclick="addPoints(10000)">+10.000 Punkte</button>
@@ -143,7 +148,13 @@
       setTimeout(() => (nachricht.textContent = ""), 2000);
     }
 
-    // Admin-Funktion
+    // Icon-Leiste öffnen/schließen
+    document.getElementById("toggleIcons").addEventListener("click", () => {
+      const bar = document.getElementById("iconBar");
+      bar.style.display = (bar.style.display === "none" || bar.style.display === "") ? "flex" : "none";
+    });
+
+    // Admin-Login
     document.getElementById("adminTrigger").addEventListener("click", () => {
       const pw = prompt("Passwort für Admin-Modus?");
       if (pw === "gommemode") {
@@ -155,17 +166,10 @@
       }
     });
 
-    document.addEventListener("keydown", function (e) {
-      if (e.ctrlKey && e.key.toLowerCase() === "g") {
-        document.getElementById("adminTrigger").click();
-      }
-    });
-
     function addPoints(x) {
       if (adminAktiv) {
         punkte += x;
         updateUI();
-        console.log(`${x} Punkte hinzugefügt.`);
       } else {
         alert("Zugriff verweigert");
       }
