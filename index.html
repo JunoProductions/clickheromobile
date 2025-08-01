@@ -30,12 +30,9 @@
     <button id="buyAuto5">Klick-Galaxie</button>
   </div>
 
-  <!-- ⚙️ Icon-Leiste öffnen -->
-  <button id="toggleIcons" title="Menü öffnen">
-    ⚙️
-  </button>
+  <!-- ⚙️ Symbolleiste -->
+  <button id="toggleIcons" title="Menü öffnen">⚙️</button>
 
-  <!-- 🛠 Symbolleiste -->
   <div id="iconBar">
     <button id="adminTrigger" title="Admin">🛠️</button>
     <button title="Speichern (später)">💾</button>
@@ -43,7 +40,7 @@
     <button title="Theme (später)">🌙</button>
   </div>
 
-  <!-- 🛠 Admin-Panel -->
+  <!-- 🛠 Admin-Panel (start hidden) -->
   <div id="adminPanel">
     <h2>🛠 Admin-Bereich</h2>
     <button onclick="addPoints(1000)">+1.000 Punkte</button>
@@ -62,11 +59,7 @@
       { id: "buyClick3", name: "Thicc Click", bonus: 7, base: 300, factor: 1.7, level: 0 }
     ];
 
-    function getKlickPreis(upg) {
-      return Math.floor(upg.base * Math.pow(upg.factor, upg.level));
-    }
-
-    let autoClickerStufen = [0, 0, 0, 0, 0];
+    const autoClickerStufen = [0, 0, 0, 0, 0];
     const autoClickerStartKosten = [800, 2500, 9000, 20000, 100000];
     const autoClickerFaktor = 1.4;
     const autoClickerPower = [1, 5, 12, 30, 100];
@@ -77,6 +70,10 @@
       "Klick-Fabrik",
       "Klick-Galaxie"
     ];
+
+    function getKlickPreis(upg) {
+      return Math.floor(upg.base * Math.pow(upg.factor, upg.level));
+    }
 
     function getAutoKosten(i) {
       return Math.floor(autoClickerStartKosten[i] * Math.pow(autoClickerFaktor, autoClickerStufen[i]));
@@ -148,13 +145,11 @@
       setTimeout(() => (nachricht.textContent = ""), 2000);
     }
 
-    // Icon-Leiste öffnen/schließen
     document.getElementById("toggleIcons").addEventListener("click", () => {
       const bar = document.getElementById("iconBar");
       bar.style.display = (bar.style.display === "none" || bar.style.display === "") ? "flex" : "none";
     });
 
-    // Admin-Login
     document.getElementById("adminTrigger").addEventListener("click", () => {
       const pw = prompt("Passwort für Admin-Modus?");
       if (pw === "gommemode") {

@@ -1,48 +1,110 @@
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background-color: #111;
-  color: #eee;
+  font-family: 'Courier New', monospace;
+  background-color: #0f380f;
+  color: #9bbc0f;
   margin: 0;
   padding: 20px;
+  text-align: center;
+}
+
+h1, h2 {
+  color: #8bac0f;
+  text-shadow: 1px 1px #000;
 }
 
 button {
-  margin: 5px;
-  padding: 10px 15px;
+  font-family: 'Courier New', monospace;
+  background-color: #8bac0f;
+  color: #0f380f;
+  border: 2px solid #0f380f;
+  padding: 10px 16px;
+  margin: 6px;
+  border-radius: 2px;
   font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  background-color: #444;
-  color: #fff;
   cursor: pointer;
+  transition: transform 0.1s ease;
 }
 
 button:hover {
-  background-color: #666;
+  transform: scale(1.05);
+  background-color: #9bbc0f;
+}
+
+button:active {
+  transform: scale(0.95);
+  background-color: #6b8e23;
+}
+
+#score, #nachricht, #proKlick {
+  font-size: 20px;
+  margin: 10px auto;
+  background-color: #0f380f;
+  padding: 6px 12px;
+  border: 2px dashed #8bac0f;
+  display: inline-block;
 }
 
 .section {
+  border-top: 2px dashed #4e7504;
   margin-top: 30px;
+  padding-top: 20px;
 }
 
 #adminPanel {
   display: none;
-  margin-top: 30px;
+  background-color: #1a441a;
+  padding: 15px;
+  margin-top: 25px;
+  border: 2px solid #8bac0f;
+}
+
+#iconBar {
+  display: none;
+  position: fixed;
+  top: 50px;
+  right: 10px;
+  background: #1a441a;
+  border: 2px solid #8bac0f;
+  border-radius: 6px;
+  padding: 10px;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
 }
 
 #iconBar button {
   background: none;
   border: none;
   font-size: 24px;
-  color: white;
+  color: #9bbc0f;
   cursor: pointer;
 }
 
 #iconBar button:hover {
-  color: gold;
+  color: #cce06b;
 }
 
-#iconBar {
-  display: none;
+#toggleIcons {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 10000;
+  font-size: 22px;
+  background: #0f380f;
+  color: #9bbc0f;
+  border: 2px solid #8bac0f;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  #score, #nachricht, #proKlick {
+    font-size: 16px;
+  }
 }
