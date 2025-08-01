@@ -1,140 +1,137 @@
 body {
-  font-family: 'Roboto', sans-serif;
   margin: 0;
-  padding: 20px;
-  text-align: center;
-  transition: background 0.4s, color 0.4s;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #fde9f2;
+  color: #333;
+  overflow-x: hidden;
 }
 
-button {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 10px;
-  margin: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.main-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
 }
 
-#score, #nachricht, #proKlick {
-  font-size: 20px;
-  padding: 10px;
-  margin: 10px auto;
-  background: #fff;
-  border-radius: 8px;
+h1 {
+  margin-bottom: 0.5rem;
+}
+
+#score, #proKlick {
+  margin: 0.2rem;
+}
+
+.clicker-wrapper {
+  position: relative;
   display: inline-block;
+  margin: 1rem 0;
 }
 
-/* SECTION STYLE */
-.section {
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 12px;
-  max-width: 600px;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+#clicker {
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+}
+
+#click-effects {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.floating-text {
+  position: absolute;
+  color: #ff66cc;
+  font-weight: bold;
+  animation: floatUp 1s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-60px); }
+}
+
+#resetBtn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+#shopPanel {
+  position: fixed;
+  top: 0;
+  right: -350px;
+  width: 300px;
+  height: 100%;
+  background: white;
+  box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  z-index: 999;
+  padding: 1rem;
+}
+
+#shopPanel.active {
+  right: 0;
+}
+
+#toggleShop {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background: hotpink;
+  color: white;
+  border: none;
+  border-radius: 10px 0 0 10px;
+  padding: 1rem;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.upgrade-card {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 0.7rem;
+  background: #ffe0f0;
+  border: 1px solid #ff66cc;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+#nachricht {
+  text-align: center;
+  color: red;
+  font-weight: bold;
+  margin-top: 1rem;
 }
 
 #adminPanel {
   display: none;
-  margin: 20px auto;
-  padding: 20px;
-  max-width: 600px;
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  background: #222;
+  color: white;
+  padding: 1rem;
   border-radius: 10px;
-  background: #fafafa;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 200;
 }
 
 #iconBar {
-  display: none;
   position: fixed;
-  top: 50px;
-  right: 10px;
-  background: #fff;
-  border-radius: 10px;
-  padding: 10px;
-  flex-direction: column;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  z-index: 1000;
-}
-
-#iconBar button {
-  background: none;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-  margin: 4px 0;
-}
-
-#toggleIcons {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  font-size: 22px;
-  background: #ffffff;
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  cursor: pointer;
-}
-
-/* THEMES */
-.theme-candy {
-  background: linear-gradient(to bottom, #f8e1f4, #ffd6f0);
-  color: #6b1e5f;
-}
-.theme-candy button {
-  background: #ff84c1;
-  color: white;
-  box-shadow: 0 4px 10px rgba(255, 132, 193, 0.4);
-}
-.theme-candy button:hover {
-  background: #f56eb0;
-}
-
-.theme-arcade {
-  background-color: #000;
-  color: #ff44cc;
-}
-.theme-arcade button {
-  background: #44ffdd;
-  color: #000;
-  box-shadow: 0 0 12px #44ffdd;
-}
-.theme-arcade button:hover {
-  background: #33ccb3;
-}
-
-.theme-fantasy {
-  background: #f4e3c1;
-  color: #4e2e14;
-  font-family: 'Cinzel', serif;
-}
-.theme-fantasy button {
-  background: #8b5e3c;
-  border: 2px solid #d4b083;
-  color: #fff8dc;
-}
-
-.theme-tech {
-  background: #f9f9f9;
-  color: #333;
-}
-.theme-tech button {
-  background: #e0e0e0;
-  color: #000;
-  border: 1px solid #ccc;
-}
-
-.theme-cursed {
-  background: #ff00ff;
-  color: #000000;
-  font-family: 'Comic Sans MS', cursive;
-}
-.theme-cursed button {
-  background: lime;
-  color: magenta;
-  border: 5px dashed yellow;
-  font-size: 20px;
+  bottom: 10px;
+  left: 10px;
+  z-index: 200;
 }
