@@ -1,0 +1,51 @@
+/* ===== Grundlayout ===== */
+body {
+  background-color: #f9f9f9;
+  color: #222;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 40px;
+}
+
+/* ===== Überschrift ===== */
+h1 {
+  font-size: 2.8em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* ===== Punktestand & Klick-Anzeige ===== */
+#score,
+#proKlick,
+#nachricht {
+  font-size: 1.4em;
+  margin: 12px auto;
+}
+
+/* ===== Nachricht extra sichtbar ===== */
+#nachricht {
+  color: #c62828;
+  font-weight: bold;
+  min-height: 1.5em;
+}
+
+/* ===== Buttons ===== */
+button {
+  background-color: #ffffff;
+  color: #333;
+  border: 2px solid #2196f3;
+  padding: 12px 25px;
+  font-size: 1em;
+  margin: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+button:hover {
+  background-color: #e3f2fd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}

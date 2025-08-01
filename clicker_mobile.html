@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Click Hero</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        background-color: #121212;
+        color: #f1f1f1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        min-height: 100vh;
+      }
+
+      h1 {
+        margin-top: 20px;
+        font-size: 2.5em;
+      }
+
+      #score, #proKlick, #nachricht {
+        margin: 10px 0;
+        font-size: 1.4em;
+      }
+
+      button {
+        background-color: #1e88e5;
+        color: white;
+        border: none;
+        padding: 14px 20px;
+        margin: 10px;
+        font-size: 1.1em;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 400px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      button:active {
+        transform: scale(0.97);
+      }
+
+      #clicker {
+        background-color: #43a047;
+      }
+
+      #animation-container {
+        height: 20px;
+      }
+
+      h2 {
+        margin-top: 30px;
+        font-size: 1.4em;
+        color: #90caf9;
+      }
+
+      .section {
+        width: 100%;
+        max-width: 500px;
+        padding: 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Click Hero</h1>
+
+    <div id="score">Punkte: 0</div>
+    <div id="nachricht"></div>
+    <div id="animation-container"></div>
+    <div id="proKlick">Punkte pro Klick: 1</div>
+
+    <button id="clicker">Klick mich</button>
+
+    <div class="section">
+      <h2>🖱️ Klick-Upgrades</h2>
+      <button id="buyClick1">Tap Tap Boost (10 / +1)</button>
+      <button id="buyClick2">Double Trouble (50 / +3)</button>
+      <button id="buyClick3">Thicc Click (200 / +7)</button>
+
+      <h2>🤖 Auto-Clicker</h2>
+      <button id="buyAuto1">Clickdrone Mini (250 / +1/s)</button>
+      <button id="buyAuto2">AutoTap Pro (1000 / +5/s)</button>
+      <button id="buyAuto3">Fingerbot 3000 (5000 / +12/s)</button>
+      <button id="buyAuto4">Klick-Fabrik (15000 / +30/s)</button>
+      <button id="buyAuto5">Klick-Galaxie (50000 / +100/s)</button>
+    </div>
+
+    <script>
+      let punkte = 0;
+      let punkteProKlick = 1;
+
+      const score = document.getElementById("score");
+      const nachricht = document.getElementById("nachricht");
+      const proKlickAnzeige = document.getElementById("proKlick");
+      const clickButton = document.getElementById("clicker");
+
+      clickButton.addEventListener("click", function () {
+        punkte += punkteProKlick;
+        updateUI();
+      });
+
+      // Klick-Upgrades
+      document.getElementById("buyClick1").addEventListener("click", function () {
+        if (punkte >= 10) {
+          punkte -= 10;
+          punkteProKlick += 1;
+          updateUI();
+        } else {
+          showMessage("Nicht genug Punkte für Tap Tap Boost");
+        }
+      });
+
+      document.getElementById("buyClick2").addEventListener("click", function () {
+        if (punkte >= 50) {
+          punkte -= 50;
+          punkteProKlick += 3;
+          updateUI();
+        } else {
+          showMessage("Nicht genug Punkte für Double Trouble");
+        }
+      });
+
+      document.getElementById("buyClick3").addEventListener("click", function () {
+        if (punkte >= 200) {
+          punkte -= 200;
+          punkteProKlick += 7;
+          updateUI();
+        } else {
+          showMessage("Nicht genug Punkte für Thicc Click");
+        }
+      });
+
+      // AutoClicker
+      let autoClickerStufen = [0, 0, 0, 0, 0];
+      const autoClickerKosten = [250, 1000, 5000, 15000, 50000];
+      const autoClickerPower = [1, 5, 12, 30, 100];
+
+      for (let i = 0; i < 5; i++) {
+        const btn = document.getElementById("buyAuto" + (i + 1));
+        btn.addEventListener("click", function () {
+          if (punkte >= autoClickerKosten[i]) {
+            punkte -= autoClickerKosten[i];
+            autoClickerStufen[i]++;
+            updateUI();
+          } else {
+            showMessage("Nicht genug Punkte für AutoClicker " + (i + 1));
+          }
+        });
+      }
+
+      setInterval(() => {
+        for (let i = 0; i < autoClickerStufen.length; i++) {
+          punkte += autoClickerStufen[i] * autoClickerPower[i];
+        }
+        updateUI();
+      }, 1000);
+
+      function updateUI() {
+        score.textContent = "Punkte: " + punkte;
+        proKlickAnzeige.textContent = "Punkte pro Klick: " + punkteProKlick;
+      }
+
+      function showMessage(text) {
+        nachricht.textContent = text;
+        setTimeout(() => (nachricht.textContent = ""), 2000);
+      }
+    </script>
+  </body>
+</html>
