@@ -2,11 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let punkte = 0;
   let punkteProKlick = 1;
   let adminAktiv = false;
+
   const sounds = {
-  click: new Audio("sounds/click.wav"),
-  upgrade: new Audio("sounds/upgrade.wav"),
-  error: new Audio("sounds/error.wav")
-};
+    click: new Audio("sounds/click.wav"),
+    upgrade: new Audio("sounds/upgrade.wav"),
+    error: new Audio("sounds/error.wav")
+  };
 
   const klickUpgrades = [
     { id: "buyClick1", name: "Tap Tap Boost", bonus: 1, base: 50, factor: 1.6, level: 0 },
@@ -33,31 +34,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const proKlickAnzeige = document.getElementById("proKlick");
   const clickButton = document.getElementById("clicker");
 
-  clickButton.addEventListener("click", () => {
-  sounds.click.play();
-  punkte += punkteProKlick;
-  updateUI();
-  showFloatingPoints(punkteProKlick);
-  saveGame();
-});
+  
 
+  clickButton.addEventListener("click", () => {
+    sounds.click.play();
+    punkte += punkteProKlick;
+    updateUI();
+    showFloatingPoints(punkteProKlick);
+    saveGame();
+  });
 
   klickUpgrades.forEach((upg) => {
     const btn = document.getElementById(upg.id);
     btn.addEventListener("click", () => {
       const preis = getKlickPreis(upg);
       if (punkte >= preis) {
-  punkte -= preis;
-  punkteProKlick += upg.bonus;
-  upg.level++;
-  sounds.upgrade.play();
-  updateUI();
-  saveGame();
-} else {
-  sounds.error.play();
-  showMessage("Nicht genug Punkte für " + upg.name + " (" + preis + ")");
-}
-
+        punkte -= preis;
+        punkteProKlick += upg.bonus;
+        upg.level++;
+        sounds.upgrade.play();
+        updateUI();
+        saveGame();
+      } else {
+        sounds.error.play();
+        showMessage("Nicht genug Punkte für " + upg.name + " (" + preis + ")");
+      }
     });
   });
 
@@ -88,17 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("shopPanel").classList.toggle("active");
   });
 
-  document.getElementById("adminTrigger").addEventListener("click", () => {
-    const pw = prompt("Passwort für Admin-Modus?");
-    if (pw === "gommemode") {
-      adminAktiv = true;
-      document.getElementById("adminPanel").style.display = "block";
-      showMessage("🛠 Admin-Modus aktiviert");
-    } else {
-      showMessage("❌ Falsches Passwort");
-    }
-  });
-
   document.getElementById("resetBtn").addEventListener("click", () => {
     if (confirm("Fortschritt wirklich löschen?")) {
       punkte = 0;
@@ -113,6 +103,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+ 
+
+ 
   function getKlickPreis(upg) {
     return Math.floor(upg.base * Math.pow(upg.factor, upg.level));
   }
@@ -180,14 +173,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  loadGame();
-  updateUI();
+  // SOUND TOGGLE
+let soundMuted = false;
+document.getElementById("toggleSound").addEventListener("click", () => {
+  soundMuted = !soundMuted;
+  Object.values(sounds).forEach(s => s.muted = soundMuted);
+  document.getElementById("toggleSound").textContent = soundMuted ? "🔇 Sound: Aus" : "🔈 Sound: An";
+});
 
-  // Export addPoints
-  window.addPoints = function(x) {
-    if (adminAktiv) {
-      punkte += x;
-      updateUI();
-    }
-  };
+// SETTINGS PANEL TOGGLE
+document.getElementById("toggleSettings").addEventListener("click", () => {
+  document.getElementById("settingsPanel").classList.toggle("active");
+});
+
+// CHEATCODE EINGABE
+document.getElementById("cheatButton").addEventListener("click", () => {
+  const code = prompt("Cheatcode eingeben:");
+  if (!code) return;
+
+  if (code === "cash5000") {
+    punkte += 5000;
+    showMessage("💸 5000 Punkte erhalten!");
+  } else if (code === "allupgrades") {
+    klickUpgrades.forEach(upg => {
+      upg.level += 3;
+      punkteProKlick += upg.bonus * 3;
+    });
+    showMessage("📈 Alle Upgrades +3");
+  } else {
+    showMessage("❌ Unbekannter Cheatcode");
+  }
+
+  updateUI();
+  saveGame();
+});
 });
